@@ -3,18 +3,17 @@ MAINTAINER Razvan Crainea <razvan@opensips.org>
 
 USER root
 ENV DEBIAN_FRONTEND noninteractive
-ARG VERSION=2.4
 
-WORKDIR /usr/local/src
+ARG VERSION=3.0
+ARG BUILD=nightly
 
-RUN apt-get update -qq && apt-get install -y build-essential \
-		git bison flex m4 pkg-config libncurses5-dev rsyslog
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B
+RUN echo "deb http://apt.opensips.org jessie $VERSION-$BUILD" >/etc/apt/sources.list.d/opensips.list
 
-RUN git clone https://github.com/OpenSIPS/opensips.git -b $VERSION opensips_$VERSION
-RUN cd opensips_$VERSION && make all && make install
+RUN apt-get update -qq && apt-get install -y opensips
 
-RUN echo -e "local0.* -/var/log/opensips.log\n& stop" > /etc/rsyslog.d/opensips.conf
-RUN touch /var/log/opensips.log
+RUN sed -i "s/RUN_OPENSIPS=no/RUN_OPENSIPS=yes/g" /etc/default/opensips
+RUN sed -i "s/DAEMON=\/sbin\/opensips/DAEMON=\/usr\/sbin\/opensips/g" /etc/init.d/opensips
 
 EXPOSE 5060/udp
 
