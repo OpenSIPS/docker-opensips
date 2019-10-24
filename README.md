@@ -19,3 +19,8 @@ To start the image, simply run:
 ```
 make start
 ```
+
+## Packages on DockerHub
+
+Released docker packages are visible on DockerHub  
+https://hub.docker.com/r/opensips/opensips
