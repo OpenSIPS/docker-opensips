@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 MAINTAINER Razvan Crainea <razvan@opensips.org>
 
 USER root
@@ -6,6 +6,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 ARG VERSION=3.0
 ARG BUILD=nightly
+
+RUN apt-get update -qq && apt-get install -y gnupg2
 
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B
 RUN echo "deb http://apt.opensips.org jessie $VERSION-$BUILD" >/etc/apt/sources.list.d/opensips.list
