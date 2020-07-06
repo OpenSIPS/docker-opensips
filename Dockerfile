@@ -18,10 +18,11 @@ RUN echo "deb http://apt.opensips.org buster ${OPENSIPS_VERSION}-${OPENSIPS_BUIL
 
 RUN apt update -qq && apt -y install opensips
 
-ARG OPENSIPS_CLI=true
+ARG OPENSIPS_CLI=false
 RUN if [ ${OPENSIPS_CLI} = true ]; then \
     echo "deb https://apt.opensips.org buster cli-${OPENSIPS_BUILD}" >/etc/apt/sources.list.d/opensips-cli.list \
     && apt update -qq && apt -y install opensips-cli \
+    && rm -fr /usr/local/bin/opensips-cli /usr/local/lib/python3.6/dist-packages/opensipscli* \
     ;fi
 
 ARG OPENSIPS_JSON_MODULE=false
