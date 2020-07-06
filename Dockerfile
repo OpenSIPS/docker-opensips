@@ -7,10 +7,10 @@ USER root
 ENV DEBIAN_FRONTEND noninteractive
 
 ARG OPENSIPS_VERSION=3.0
-ARG OPENSIPS_BUILD=release
+ARG OPENSIPS_BUILD=releases
 
 #install basic components and set local timezone
-RUN apt update -qq && apt-get install -y gnupg2
+RUN apt update -qq && apt-get install -y gnupg2 ca-certificates
 
 #install required opensips and modules
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B
@@ -18,10 +18,10 @@ RUN echo "deb http://apt.opensips.org buster ${OPENSIPS_VERSION}-${OPENSIPS_BUIL
 
 RUN apt update -qq && apt -y install opensips
 
-ARG OPENSIPS_CLI=false
+ARG OPENSIPS_CLI=true
 RUN if [ ${OPENSIPS_CLI} = true ]; then \
     echo "deb https://apt.opensips.org buster cli-${OPENSIPS_BUILD}" >/etc/apt/sources.list.d/opensips-cli.list \
-    apt update -qq && apt -y install opensips-cli \
+    && apt update -qq && apt -y install opensips-cli \
     ;fi
 
 ARG OPENSIPS_JSON_MODULE=false
