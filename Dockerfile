@@ -1,16 +1,20 @@
-FROM debian:stretch
-MAINTAINER Razvan Crainea <razvan@opensips.org>
+FROM debian:buster
+LABEL maintainer="Bob Wang <bobw@exetel.com.au>"
 
 USER root
+
+# Set Environment Variables
 ENV DEBIAN_FRONTEND noninteractive
 
-ARG VERSION=3.0
-ARG BUILD=nightly
+ARG OPENSIPS_VERSION=3.0
+ARG OPENSIPS_BUILD=releases
 
-RUN apt-get update -qq && apt-get install -y gnupg2
+#install basic components
+RUN apt update -qq && apt-get install -y gnupg2
 
+#add keyserver, repository
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B
-RUN echo "deb http://apt.opensips.org jessie $VERSION-$BUILD" >/etc/apt/sources.list.d/opensips.list
+RUN echo "deb http://apt.opensips.org buster ${OPENSIPS_VERSION}-${OPENSIPS_BUILD}" >/etc/apt/sources.list.d/opensips.list
 
 RUN apt-get update -qq && apt-get install -y opensips
 
