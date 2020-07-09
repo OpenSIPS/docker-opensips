@@ -18,9 +18,6 @@ RUN echo "deb http://apt.opensips.org buster ${OPENSIPS_VERSION}-${OPENSIPS_BUIL
 
 RUN apt-get update -qq && apt-get install -y opensips
 
-RUN sed -i "s/RUN_OPENSIPS=no/RUN_OPENSIPS=yes/g" /etc/default/opensips
-RUN sed -i "s/DAEMON=\/sbin\/opensips/DAEMON=\/usr\/sbin\/opensips/g" /etc/init.d/opensips
-
 EXPOSE 5060/udp
 
 COPY run.sh /run.sh
