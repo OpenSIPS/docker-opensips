@@ -24,6 +24,11 @@ RUN if [ ${OPENSIPS_CLI} = true ]; then \
     && apt update -qq && apt -y install opensips-cli \
     ;fi
 
+ARG OPENSIPS_JSON_MODULE=false
+RUN if [ ${OPENSIPS_JSON_MODULE} = true ]; then \
+    apt-get -y install opensips-json-module \
+    ;fi
+
 RUN rm -rf /var/lib/apt/lists/*
 
 EXPOSE 5060/udp
