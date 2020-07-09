@@ -29,6 +29,11 @@ RUN if [ ${OPENSIPS_JSON_MODULE} = true ]; then \
     apt-get -y install opensips-json-module \
     ;fi
 
+ARG OPENSIPS_MYSQL_MODULE=false
+RUN if [ ${OPENSIPS_MYSQL_MODULE} = true ]; then \
+    apt-get -y install opensips-mysql-module \
+    ;fi
+
 RUN rm -rf /var/lib/apt/lists/*
 
 EXPOSE 5060/udp
