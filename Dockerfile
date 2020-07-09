@@ -39,6 +39,11 @@ RUN if [ ${OPENSIPS_HTTP_MODULE} = true ]; then \
     apt-get -y install opensips-http-modules \
     ;fi
 
+ARG OPENSIPS_DIALPLAN_MODULE=false
+RUN if [ ${OPENSIPS_DIALPLAN_MODULE} = true ]; then \
+    apt-get -y install opensips-dialplan-module \
+    ;fi
+
 RUN rm -rf /var/lib/apt/lists/*
 
 EXPOSE 5060/udp
