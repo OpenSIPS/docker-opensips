@@ -10,13 +10,21 @@ ARG OPENSIPS_VERSION=3.0
 ARG OPENSIPS_BUILD=releases
 
 #install basic components
-RUN apt update -qq && apt-get install -y gnupg2
+RUN apt update -qq && apt install -y gnupg2 ca-certificates
 
 #add keyserver, repository
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B
-RUN echo "deb http://apt.opensips.org buster ${OPENSIPS_VERSION}-${OPENSIPS_BUILD}" >/etc/apt/sources.list.d/opensips.list
+RUN echo "deb https://apt.opensips.org buster ${OPENSIPS_VERSION}-${OPENSIPS_BUILD}" >/etc/apt/sources.list.d/opensips.list
 
-RUN apt-get update -qq && apt-get install -y opensips
+RUN apt update -qq && apt install -y opensips
+
+ARG OPENSIPS_CLI=false
+RUN if [ ${OPENSIPS_CLI} = true ]; then \
+    echo "deb https://apt.opensips.org buster cli-${OPENSIPS_BUILD}" >/etc/apt/sources.list.d/opensips-cli.list \
+    && apt update -qq && apt -y install opensips-cli \
+    ;fi
+
+RUN rm -rf /var/lib/apt/lists/*
 
 EXPOSE 5060/udp
 
