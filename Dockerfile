@@ -1,5 +1,5 @@
 FROM debian:buster
-LABEL maintainer="Bob Wang <bobw@exetel.com.au>"
+LABEL maintainer="Razvan Crainea <razvan@opensips.org>"
 
 USER root
 
