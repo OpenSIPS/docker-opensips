@@ -24,4 +24,4 @@ build:
 		.
 
 start:
-	docker run -d --name $(NAME) opensips/opensips:$(OPENSIPS_VERSION)
+	docker run -d --name $(NAME) opensips/opensips:$(OPENSIPS_DOCKER_TAG)
