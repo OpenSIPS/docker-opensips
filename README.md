@@ -9,6 +9,11 @@ You can build the docker image by running:
 make build
 ```
 
+You can build opensips3.1 the docker image by running:
+```
+make build-3.1
+```
+
 This command will build a docker image with OpenSIPS master version taken from
 the git repository. To build a different git version, you can run:
 ```
