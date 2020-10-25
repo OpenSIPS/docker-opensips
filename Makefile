@@ -37,4 +37,4 @@ build:
 		.
 
 start:
-	docker run -p 5060:5060/udp -d --name $(NAME) opensips/opensips:$(OPENSIPS_DOCKER_TAG)
+	docker run -d --name $(NAME) opensips/opensips:$(OPENSIPS_DOCKER_TAG)
