@@ -1,11 +1,11 @@
 NAME ?= opensips
 OPENSIPS_VERSION ?= 3.0
 OPENSIPS_BUILD ?= nightly
-OPENSIPS_DOCKER_TAG ?= latest
-OPENSIPS_CLI ?= false
+OPENSIPS_DOCKER_TAG ?= dave
+OPENSIPS_CLI ?= true
 OPENSIPS_JSON_MODULE ?= false
-OPENSIPS_MYSQL_MODULE ?= false
-OPENSIPS_HTTP_MODULE ?= false
+OPENSIPS_MYSQL_MODULE ?= true
+OPENSIPS_HTTP_MODULE ?= true
 OPENSIPS_DIALPLAN_MODULE ?= false
 
 all: build start
@@ -20,8 +20,8 @@ build:
 		--build-arg=OPENSIPS_MYSQL_MODULE=${OPENSIPS_MYSQL_MODULE} \
 		--build-arg=OPENSIPS_HTTP_MODULE=${OPENSIPS_HTTP_MODULE} \
 		--build-arg=OPENSIPS_DIALPLAN_MODULE=${OPENSIPS_DIALPLAN_MODULE} \
-		--tag="opensips/opensips:$(OPENSIPS_DOCKER_TAG)" \
+		--tag="opensips:$(OPENSIPS_DOCKER_TAG)" \
 		.
 
 start:
-	docker run -d --name $(NAME) opensips/opensips:$(OPENSIPS_DOCKER_TAG)
+	docker run -d --name $(NAME) -p 5060:5060/udp opensips:$(OPENSIPS_DOCKER_TAG)

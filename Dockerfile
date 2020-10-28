@@ -10,7 +10,7 @@ ARG OPENSIPS_VERSION=3.0
 ARG OPENSIPS_BUILD=releases
 
 #install basic components
-RUN apt update -qq && apt install -y gnupg2 ca-certificates
+RUN apt update -qq && apt install -y apt-utils gnupg2 ca-certificates rsyslog default-libmysqlclient-dev 
 
 #add keyserver, repository
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B
@@ -45,6 +45,13 @@ RUN if [ ${OPENSIPS_DIALPLAN_MODULE} = true ]; then \
     ;fi
 
 RUN rm -rf /var/lib/apt/lists/*
+
+RUN chmod 755 /etc/opensips/opensips.cfg
+
+COPY conf/opensips_authdb.cfg /etc/opensips/opensips.cfg
+COPY conf/opensips-cli.cfg /etc/opensips/opensips-cli.cfg
+COPY conf/logging.conf /etc/rsyslog.d/logging.conf
+COPY conf/opensips_cp-create.sql /usr/share/opensips/mysql/opensips_cp-create.sql
 
 EXPOSE 5060/udp
 
