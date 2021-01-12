@@ -20,7 +20,7 @@ RUN apt update -qq && apt install -y opensips
 
 ARG OPENSIPS_CLI=false
 RUN if [ ${OPENSIPS_CLI} = true ]; then \
-    echo "deb https://apt.opensips.org buster cli-${OPENSIPS_BUILD}" >/etc/apt/sources.list.d/opensips-cli.list \
+    echo "deb https://apt.opensips.org buster cli-nightly" >/etc/apt/sources.list.d/opensips-cli.list \
     && apt update -qq && apt -y install opensips-cli \
     ;fi
 

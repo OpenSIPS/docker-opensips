@@ -1,6 +1,6 @@
 NAME ?= opensips
 OPENSIPS_VERSION ?= 3.1
-OPENSIPS_BUILD ?= nightly
+OPENSIPS_BUILD ?= releases
 OPENSIPS_DOCKER_TAG ?= latest
 OPENSIPS_CLI ?= false
 OPENSIPS_JSON_MODULE ?= false
