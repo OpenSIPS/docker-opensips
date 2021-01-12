@@ -15,6 +15,11 @@ the git repository. To build a different git version, you can run:
 OPENSIPS_VERSION=2.2 make build
 ```
 
+To build with MySQL support:
+```
+OPENSIPS_EXTRA_MODULES=opensips-mysql-module make build
+```
+
 To start the image, simply run:
 ```
 make start
@@ -26,6 +31,7 @@ You can set different variables to tune your deployment:
  * `OPENSIPS_BUILD` - specifies the build to use, `nightly` or `releases` (Default: `releases`)
  * `OPENSIPS_DOCKER_TAG` - indicates the docker tag (Default: `latest`)
  * `OPENSIPS_CLI` - specifies whether to install opensips-cli (`true`) or not (`false`) (Default: `true`)
+ * `OPENSIPS_EXTRA_MODULES` - specifies extra opensips modules to install (Default: no other module)
 
 ## Packages on DockerHub
 

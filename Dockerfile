@@ -24,24 +24,9 @@ RUN if [ ${OPENSIPS_CLI} = true ]; then \
     && apt update -qq && apt -y install opensips-cli \
     ;fi
 
-ARG OPENSIPS_JSON_MODULE=false
-RUN if [ ${OPENSIPS_JSON_MODULE} = true ]; then \
-    apt-get -y install opensips-json-module \
-    ;fi
-
-ARG OPENSIPS_MYSQL_MODULE=false
-RUN if [ ${OPENSIPS_MYSQL_MODULE} = true ]; then \
-    apt-get -y install opensips-mysql-module \
-    ;fi
-
-ARG OPENSIPS_HTTP_MODULE=false
-RUN if [ ${OPENSIPS_HTTP_MODULE} = true ]; then \
-    apt-get -y install opensips-http-modules \
-    ;fi
-
-ARG OPENSIPS_DIALPLAN_MODULE=false
-RUN if [ ${OPENSIPS_DIALPLAN_MODULE} = true ]; then \
-    apt-get -y install opensips-dialplan-module \
+ARG OPENSIPS_EXTRA_MODULES
+RUN if [ -n "${OPENSIPS_EXTRA_MODULES}" ]; then \
+    apt-get -y install ${OPENSIPS_EXTRA_MODULES} \
     ;fi
 
 RUN rm -rf /var/lib/apt/lists/*
