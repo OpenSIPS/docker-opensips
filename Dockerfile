@@ -30,9 +30,8 @@ RUN if [ -n "${OPENSIPS_EXTRA_MODULES}" ]; then \
     ;fi
 
 RUN rm -rf /var/lib/apt/lists/*
+RUN sed -i "s/^\(socket\|listen\)=udp.*5060/\1=udp:eth0:5060/g" /etc/opensips/opensips.cfg
 
 EXPOSE 5060/udp
 
-COPY run.sh /run.sh
-
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT ["/usr/sbin/opensips", "-FE"]
