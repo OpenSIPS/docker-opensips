@@ -13,7 +13,7 @@ ARG OPENSIPS_BUILD=releases
 RUN apt-get -y update -qq && apt-get -y install gnupg2 ca-certificates
 
 #add keyserver, repository
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B
+RUN apt-key adv --fetch-keys https://apt.opensips.org/pubkey.gpg
 RUN echo "deb https://apt.opensips.org buster ${OPENSIPS_VERSION}-${OPENSIPS_BUILD}" >/etc/apt/sources.list.d/opensips.list
 
 RUN apt-get -y update -qq && apt-get -y install opensips
