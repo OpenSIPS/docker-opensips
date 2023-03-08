@@ -12,12 +12,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Prepare Environment
-      continue-on-error: true
       run: |
-        test -n "${{ github.event.client_payload.version }}" && echo "OPENSIPS_VERSION=${{ github.event.client_payload.version }}" >> $GITHUB_ENV
-        test -n "${{ github.event.client_payload.tag }}" && echo "OPENSIPS_DOCKER_TAG=${{ github.event.client_payload.tag }}" >> $GITHUB_ENV
-        test -n "${{ github.event.client_payload.cli }}" && echo "OPENSIPS_CLI=${{ github.event.client_payload.cli }}" >> $GITHUB_ENV
-        test -n "${{ github.event.client_payload.modules }}" && echo "OPENSIPS_EXTRA_MODULES=\"${{ github.event.client_payload.modules }}\"" >> $GITHUB_ENV
+        test -n "${{ github.event.client_payload.version }}" && echo "OPENSIPS_VERSION=${{ github.event.client_payload.version }}" >> $GITHUB_ENV || true
+        test -n "${{ github.event.client_payload.tag }}" && echo "OPENSIPS_DOCKER_TAG=${{ github.event.client_payload.tag }}" >> $GITHUB_ENV || true
+        test -n "${{ github.event.client_payload.cli }}" && echo "OPENSIPS_CLI=${{ github.event.client_payload.cli }}" >> $GITHUB_ENV || true
+        test -n "${{ github.event.client_payload.modules }}" && echo "OPENSIPS_EXTRA_MODULES=\"${{ github.event.client_payload.modules }}\"" >> $GITHUB_ENV || true
 
     - name: Build the Docker image
       id: build
