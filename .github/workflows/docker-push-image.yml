@@ -1,7 +1,22 @@
 name: Push OpenSIPS Images in Docker Hub
 
 on:
-  - repository_dispatch
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version
+        required: false
+      tag:
+        description: Tag
+        required: false
+      cli:
+        description: Install CLI
+        required: false
+        type: boolean
+      modules:
+        description: Extra Modules
+        required: false
 
 jobs:
 
@@ -11,12 +26,22 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Prepare Environment
+
+    - name: Prepare Environment (Dispatch)
+      if: ${{ env.GITHUB_EVENT_NAME == 'repository_dispatch' }}
       run: |
         test -n "${{ github.event.client_payload.version }}" && echo "OPENSIPS_VERSION=${{ github.event.client_payload.version }}" >> $GITHUB_ENV || true
         test -n "${{ github.event.client_payload.tag }}" && echo "OPENSIPS_DOCKER_TAG=${{ github.event.client_payload.tag }}" >> $GITHUB_ENV || true
         test -n "${{ github.event.client_payload.cli }}" && echo "OPENSIPS_CLI=${{ github.event.client_payload.cli }}" >> $GITHUB_ENV || true
         test -n "${{ github.event.client_payload.modules }}" && echo "OPENSIPS_EXTRA_MODULES=\"${{ github.event.client_payload.modules }}\"" >> $GITHUB_ENV || true
+
+    - name: Prepare Environment (Workflow)
+      if: ${{ env.GITHUB_EVENT_NAME == 'workflow_dispatch' }}
+      run: |
+        test -n "${{ github.event.inputs.version }}" && echo "OPENSIPS_VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV || true
+        test -n "${{ github.event.inputs.tag }}" && echo "OPENSIPS_DOCKER_TAG=${{ github.event.inputs.tag }}" >> $GITHUB_ENV || true
+        test -n "${{ github.event.inputs.cli }}" && echo "OPENSIPS_CLI=${{ github.event.inputs.cli }}" >> $GITHUB_ENV || true
+        test -n "${{ github.event.inputs.modules }}" && echo "OPENSIPS_EXTRA_MODULES=\"${{ github.event.inputs.modules }}\"" >> $GITHUB_ENV || true
 
     - name: Build the Docker image
       id: build
