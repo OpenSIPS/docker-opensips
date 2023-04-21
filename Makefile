@@ -4,6 +4,7 @@ OPENSIPS_BUILD ?= releases
 OPENSIPS_DOCKER_TAG ?= latest
 OPENSIPS_CLI ?= true
 OPENSIPS_EXTRA_MODULES ?=
+DOCKER_ARGS ?=
 
 all: build start
 
@@ -14,6 +15,7 @@ build:
 		--build-arg=OPENSIPS_VERSION=$(OPENSIPS_VERSION) \
 		--build-arg=OPENSIPS_CLI=${OPENSIPS_CLI} \
 		--build-arg=OPENSIPS_EXTRA_MODULES="${OPENSIPS_EXTRA_MODULES}" \
+		$(DOCKER_ARGS) \
 		--tag="opensips/opensips:$(OPENSIPS_DOCKER_TAG)" \
 		.
 
