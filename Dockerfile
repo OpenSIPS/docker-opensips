@@ -30,8 +30,9 @@ RUN if [ -n "${OPENSIPS_EXTRA_MODULES}" ]; then \
     ;fi
 
 RUN rm -rf /var/lib/apt/lists/*
-RUN sed -i "s/log_stderror=no/log_stderror=yes/g" /etc/opensips/opensips.cfg
+RUN sed -i "s/stderror_enabled=no/stderror_enabled=yes/g" /etc/opensips/opensips.cfg && \
+    sed -i "s/syslog_enabled=yes/syslog_enabled=no/g" /etc/opensips/opensips.cfg
 
 EXPOSE 5060/udp
 
-ENTRYPOINT ["/usr/sbin/opensips", "-FE"]
+ENTRYPOINT ["/usr/sbin/opensips", "-F"]

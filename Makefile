@@ -1,5 +1,5 @@
 NAME ?= opensips
-OPENSIPS_VERSION ?= 3.3
+OPENSIPS_VERSION ?= 3.4
 OPENSIPS_BUILD ?= releases
 OPENSIPS_DOCKER_TAG ?= latest
 OPENSIPS_CLI ?= true
@@ -11,6 +11,7 @@ all: build start
 .PHONY: build start
 build:
 	docker build \
+		--no-cache \
 		--build-arg=OPENSIPS_BUILD=$(OPENSIPS_BUILD) \
 		--build-arg=OPENSIPS_VERSION=$(OPENSIPS_VERSION) \
 		--build-arg=OPENSIPS_CLI=${OPENSIPS_CLI} \
