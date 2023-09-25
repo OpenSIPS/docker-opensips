@@ -27,7 +27,9 @@ make start
 
 ## Variables
 You can set different variables to tune your deployment:
- * `OPENSIPS_VERSION` - sets the opensips version (Default: `3.1`)
+ * `OPENSIPS_VERSION` - sets the opensips version (Default: `3.4`)
+ * `OPENSIPS_VERSION_MINOR` - forces a specific minor version of opensips (Default: not used, latest will be installed)
+ * `OPENSIPS_VERSION_REVISION` - forces a specific revision/build of opensips; only taken into consideration if `OPENSIPS_VERSION_MINOR` is provided (Default: 1)
  * `OPENSIPS_BUILD` - specifies the build to use, `nightly` or `releases` (Default: `releases`)
  * `OPENSIPS_DOCKER_TAG` - indicates the docker tag (Default: `latest`)
  * `OPENSIPS_CLI` - specifies whether to install opensips-cli (`true`) or not (`false`) (Default: `true`)
