@@ -13,6 +13,7 @@ on:
         description: Install CLI
         required: false
         type: boolean
+        default: true
       modules:
         description: Extra Modules
         required: false
