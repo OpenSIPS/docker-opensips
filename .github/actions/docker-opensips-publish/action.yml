@@ -24,25 +24,25 @@ inputs:
 runs:
   using: "composite"
 
-    steps:
-    - uses: actions/checkout@v4
+  steps:
+  - uses: actions/checkout@v4
 
-    - name: Prepare Environment
-      run: |
-        test -n "${{ inputs.version }}" && echo "OPENSIPS_VERSION=${{ inputs.version }}" >> $GITHUB_ENV || true
-        test -n "${{ inputs.tag }}" && echo "OPENSIPS_DOCKER_TAG=${{ inputs.tag }}" >> $GITHUB_ENV || true
-        test -n "${{ inputs.cli }}" && echo "OPENSIPS_CLI=${{ inputs.cli }}" >> $GITHUB_ENV || true
-        test -n "${{ inputs.modules }}" && echo "OPENSIPS_EXTRA_MODULES=\"${{ inputs.modules }}\"" >> $GITHUB_ENV || true
+  - name: Prepare Environment
+    run: |
+      test -n "${{ inputs.version }}" && echo "OPENSIPS_VERSION=${{ inputs.version }}" >> $GITHUB_ENV || true
+      test -n "${{ inputs.tag }}" && echo "OPENSIPS_DOCKER_TAG=${{ inputs.tag }}" >> $GITHUB_ENV || true
+      test -n "${{ inputs.cli }}" && echo "OPENSIPS_CLI=${{ inputs.cli }}" >> $GITHUB_ENV || true
+      test -n "${{ inputs.modules }}" && echo "OPENSIPS_EXTRA_MODULES=\"${{ inputs.modules }}\"" >> $GITHUB_ENV || true
 
-    - name: Build the Docker image
-      id: build
-      run: make build 2>&1 | tee /tmp/build.log && grep "naming to docker.io" /tmp/build.log | awk  -F'[ /]' '{print "DOCKER_TAG=" $5 "/" $6 }' >> $GITHUB_OUTPUT
+  - name: Build the Docker image
+    id: build
+    run: make build 2>&1 | tee /tmp/build.log && grep "naming to docker.io" /tmp/build.log | awk  -F'[ /]' '{print "DOCKER_TAG=" $5 "/" $6 }' >> $GITHUB_OUTPUT
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2.1.0
-      with:
-        username: ${{ inputs.docker-username }}
-        password: ${{ inputs.docker-token }}
+  - name: Log in to Docker Hub
+    uses: docker/login-action@v2.1.0
+    with:
+      username: ${{ inputs.docker-username }}
+      password: ${{ inputs.docker-token }}
 
-    - name: Publish the Docker image
-      run: docker push ${{ steps.build.outputs.DOCKER_TAG }}
+  - name: Publish the Docker image
+    run: docker push ${{ steps.build.outputs.DOCKER_TAG }}
