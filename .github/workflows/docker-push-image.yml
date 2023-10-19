@@ -48,7 +48,6 @@ jobs:
       run: make build 2>&1 > /tmp/build.log && cat /tmp/build.log && grep "naming to docker.io" /tmp/build.log | awk  -F'[ /]' '{print "DOCKER_TAG=" $5 "/" $6 }' >> $GITHUB_OUTPUT
 
     - name: Debugging step 1
-      id: build
       run: cat /tmp/build.log
 
     - name: Log in to Docker Hub
