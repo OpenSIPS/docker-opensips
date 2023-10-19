@@ -17,9 +17,6 @@ inputs:
   build:
     description: Indicate the build to use
     required: false
-  token:
-    description: GitHub token to fetch the repository
-    default: ${{ github.token }}
   docker-username:
     description: The Docker username to push the image with
     required: true
@@ -34,7 +31,6 @@ runs:
   - uses: actions/checkout@v4
     with:
       repository: OpenSIPS/docker-opensips
-      token: ${{ inputs.token }}
 
   - name: Prepare Environment
     shell: bash
