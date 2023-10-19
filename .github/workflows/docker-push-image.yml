@@ -45,7 +45,7 @@ jobs:
 
     - name: Build the Docker image
       id: build
-      run: make build 2>&1 | tail -n 1 | awk '{print "DOCKER_TAG="$3 }' >> $GITHUB_OUTPUT
+      run: make build 2>&1 > /tmp/build.log && cat /tmp/build.log && tail -n 1 /tmp/build.log | awk '{print "DOCKER_TAG="$3 }' >> $GITHUB_OUTPUT
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v2.1.0
