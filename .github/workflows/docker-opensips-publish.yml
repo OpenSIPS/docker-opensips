@@ -1,0 +1,19 @@
+name: Publish OpenSIPS Image in Docker Hub
+
+on:
+  repository_dispatch:
+
+jobs:
+
+  build_dispatch:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Publish OpenSIPS Docker image
+      uses: OpenSIPS/docker-opensips/.github/actions/docker-opensips-publish@main
+      with:
+        version: ${{ github.event.client_payload.version }}
+        tag: ${{ github.event.client_payload.tag }}
+        cli: ${{ github.event.client_payload.cli }}
+        modules: ${{ github.event.client_payload.modules }}
