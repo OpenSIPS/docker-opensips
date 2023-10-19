@@ -29,6 +29,8 @@ runs:
 
   steps:
   - uses: actions/checkout@v4
+    with:
+      repository: OpenSIPS/docker-opensips
 
   - name: Prepare Environment
     shell: bash
