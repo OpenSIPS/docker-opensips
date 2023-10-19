@@ -31,3 +31,5 @@ jobs:
         tag: ${{ github.event.inputs.tag }}
         cli: ${{ github.event.inputs.cli }}
         modules: ${{ github.event.inputs.modules }}
+        docker-username: ${{ secrets.DOCKER_USERNAME }}
+        docker-token: ${{ secrets.DOCKER_TOKEN }}

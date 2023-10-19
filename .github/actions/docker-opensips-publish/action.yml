@@ -17,11 +17,9 @@ inputs:
   docker-username:
     description: The Docker username to push the image with
     required: true
-    default: ${{ secrets.DOCKER_USERNAME }}
   docker-token:
     description: The Docker token used to authenticate
     required: true
-    default: ${{ secrets.DOCKER_TOKEN }}
 
 runs:
   using: "composite"
