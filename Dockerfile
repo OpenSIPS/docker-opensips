@@ -22,7 +22,7 @@ RUN apt-get -y update -qq && \
     apt-get -y install \
         opensips${OPENSIPS_VERSION_MINOR:+=$OPENSIPS_VERSION.$OPENSIPS_VERSION_MINOR-$OPENSIPS_VERSION_REVISION}
 
-ARG OPENSIPS_CLI=false
+ARG OPENSIPS_CLI=true
 RUN if [ ${OPENSIPS_CLI} = true ]; then \
     echo "deb https://apt.opensips.org bullseye cli-nightly" >/etc/apt/sources.list.d/opensips-cli.list \
     && apt-get -y update -qq && apt-get -y install opensips-cli \
