@@ -38,5 +38,6 @@ RUN sed -i "s/stderror_enabled=no/stderror_enabled=yes/g" /etc/opensips/opensips
     sed -i "s/syslog_enabled=yes/syslog_enabled=no/g" /etc/opensips/opensips.cfg
 
 EXPOSE 5060/udp
-
+HEALTHCHECK --interval=15s --timeout=5s \
+   CMD  opensips-cli -x mi uptime|grep -q  "Up time" || exit 1
 ENTRYPOINT ["/usr/sbin/opensips", "-F"]
