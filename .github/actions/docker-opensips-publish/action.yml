@@ -38,7 +38,7 @@ runs:
       test -n "${{ inputs.version }}" && echo "OPENSIPS_VERSION=${{ inputs.version }}" >> $GITHUB_ENV || true
       test -n "${{ inputs.tag }}" && echo "OPENSIPS_DOCKER_TAG=${{ inputs.tag }}" >> $GITHUB_ENV || true
       test -n "${{ inputs.cli }}" && echo "OPENSIPS_CLI=${{ inputs.cli }}" >> $GITHUB_ENV || true
-      test -n "${{ inputs.modules }}" && echo "OPENSIPS_EXTRA_MODULES=\"${{ inputs.modules }}\"" >> $GITHUB_ENV || true
+      test -n "${{ inputs.modules }}" && echo "OPENSIPS_EXTRA_MODULES='${{ inputs.modules }}'" >> $GITHUB_ENV || true
       test -n "${{ inputs.build }}" && echo "OPENSIPS_BUILD=\"${{ inputs.build }}\"" >> $GITHUB_ENV || true
 
   - name: Build the Docker image
