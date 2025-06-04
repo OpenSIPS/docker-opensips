@@ -8,6 +8,9 @@ inputs:
   tag:
     description: The Docker tag to publish the image
     required: false
+  component:
+    description: The apt component to pull the OpenSIPS deb from
+    required: false
   cli:
     description: Indicates whether to install OpenSIPS CLI as well
     required: false
@@ -40,6 +43,7 @@ runs:
       test -n "${{ inputs.cli }}" && echo "OPENSIPS_CLI=${{ inputs.cli }}" >> $GITHUB_ENV || true
       test -n "${{ inputs.modules }}" && echo "OPENSIPS_EXTRA_MODULES='${{ inputs.modules }}'" >> $GITHUB_ENV || true
       test -n "${{ inputs.build }}" && echo "OPENSIPS_BUILD=\"${{ inputs.build }}\"" >> $GITHUB_ENV || true
+      test -n "${{ inputs.component }}" && echo "OPENSIPS_COMPONENT=\"${{ inputs.component }}\"" >> $GITHUB_ENV || true
 
   - name: Build the Docker image
     shell: bash

@@ -18,6 +18,9 @@ on:
         description: Apt package build
         required: false
         default: releases
+      component:
+        description: Apt deb component
+        required: false
       modules:
         description: Extra Modules
         required: false
@@ -37,5 +40,6 @@ jobs:
         cli: ${{ github.event.inputs.cli }}
         modules: ${{ github.event.inputs.modules }}
         build: ${{ github.event.inputs.build }}
+        component: ${{ github.event.inputs.component }}
         docker-username: ${{ secrets.DOCKER_USERNAME }}
         docker-token: ${{ secrets.DOCKER_TOKEN }}
