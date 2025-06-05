@@ -4,42 +4,45 @@ LABEL maintainer="Razvan Crainea <razvan@opensips.org>"
 USER root
 
 # Set Environment Variables
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
-ARG OPENSIPS_VERSION=3.4
-ARG OPENSIPS_VERSION_MINOR
-ARG OPENSIPS_VERSION_REVISION=1
-ARG OPENSIPS_BUILD=releases
-ARG OPENSIPS_COMPONENT
+ARG OPENSIPS_VERSION=master
+ARG OPENSIPS_GIT_REPO=https://github.com/OpenSIPS/opensips.git
+ARG OPENSIPS_BUILD_MODULES
+ARG OPENSIPS_BUILD_PKGS
+ARG OPENSIPS_BUILD_ARGS
 
+WORKDIR /usr/src/opensips
 #install basic components
-RUN apt-get -y update -qq && apt-get -y install gnupg2 ca-certificates
+RUN apt-get -y update -qq && apt-get -y install \
+	git \
+	bison \
+	flex \
+	make \
+	patch \
+	pkg-config \
+	libssl-dev \
+	libncurses5-dev
 
-#add keyserver, repository
-RUN apt-key adv --fetch-keys https://apt.opensips.org/pubkey.gpg
-RUN echo "deb https://apt.opensips.org bullseye \
-		$(test -z "${OPENSIPS_COMPONENT}" && \
-				echo ${OPENSIPS_VERSION}-${OPENSIPS_BUILD} || \
-				echo ${OPENSIPS_COMPONENT})" >/etc/apt/sources.list.d/opensips.list
+RUN test -n "${OPENSIPS_BUILD_PKGS}" && \
+		apt-get -y install ${OPENSIPS_BUILD_PKGS} || true
 
-RUN apt-get -y update -qq && \
-    apt-get -y install \
-        opensips${OPENSIPS_VERSION_MINOR:+=$OPENSIPS_VERSION.$OPENSIPS_VERSION_MINOR-$OPENSIPS_VERSION_REVISION}
+RUN git clone -b ${OPENSIPS_VERSION} ${OPENSIPS_GIT_REPO} .
 
-ARG OPENSIPS_CLI=false
-RUN if [ ${OPENSIPS_CLI} = true ]; then \
-    echo "deb https://apt.opensips.org bullseye cli-nightly" >/etc/apt/sources.list.d/opensips-cli.list \
-    && apt-get -y update -qq && apt-get -y install opensips-cli \
-    ;fi
+RUN cp Makefile.conf.template Makefile.conf
 
-ARG OPENSIPS_EXTRA_MODULES
-RUN if [ -n "${OPENSIPS_EXTRA_MODULES}" ]; then \
-    apt-get -y install ${OPENSIPS_EXTRA_MODULES} \
-    ;fi
+RUN echo cfg_dir=../etc/opensips/ >> Makefile.conf
+RUN echo PREFIX=/usr >> Makefile.conf
+RUN echo LIBDIR=lib/x86_64-linux-gnu >> Makefile.conf
+RUN echo "include_modules=${OPENSIPS_BUILD_MODULES}" >> Makefile.conf
+
+RUN make ${OPENSIPS_BUILD_ARGS} install
+
+EXPOSE 5060/udp
 
 RUN rm -rf /var/lib/apt/lists/*
-RUN sed -i "s/stderror_enabled=no/stderror_enabled=yes/g" /etc/opensips/opensips.cfg && \
-    sed -i "s/syslog_enabled=yes/syslog_enabled=no/g" /etc/opensips/opensips.cfg
+RUN sed -i "s#log_stderror=no#log_stderror=yes#g" /etc/opensips/opensips.cfg
+RUN sed -i "s#/run/opensips#/run#g" /etc/opensips/opensips.cfg
 
 EXPOSE 5060/udp
 
