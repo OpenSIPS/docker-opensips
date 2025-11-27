@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bullseye AS base
 LABEL maintainer="Razvan Crainea <razvan@opensips.org>"
 
 USER root
@@ -27,6 +27,8 @@ RUN apt-get -y update -qq && \
         opensips${OPENSIPS_VERSION_MINOR:+=$OPENSIPS_VERSION.$OPENSIPS_VERSION_MINOR-$OPENSIPS_VERSION_REVISION}
 
 ARG OPENSIPS_CLI=false
+ENV OPENSIPS_CLI_ENV=${OPENSIPS_CLI}
+
 RUN if [ ${OPENSIPS_CLI} = true ]; then \
     echo "deb https://apt.opensips.org bullseye cli-nightly" >/etc/apt/sources.list.d/opensips-cli.list \
     && apt-get -y update -qq && apt-get -y install opensips-cli \
@@ -42,5 +44,16 @@ RUN sed -i "s/stderror_enabled=no/stderror_enabled=yes/g" /etc/opensips/opensips
     sed -i "s/syslog_enabled=yes/syslog_enabled=no/g" /etc/opensips/opensips.cfg
 
 EXPOSE 5060/udp
-
+HEALTHCHECK --interval=15s --timeout=5s \
+   CMD  opensips-cli -x mi uptime|grep -q  "Up time" || exit 1
 ENTRYPOINT ["/usr/sbin/opensips", "-F"]
+
+FROM base AS no-healthcheck
+HEALTHCHECK NONE
+
+FROM base AS with-healthcheck
+HEALTHCHECK --interval=15s --timeout=5s \
+    CMD if [ "$OPENSIPS_CLI_ENV" != "true" ]; then \
+            exit 0; \
+        fi; \
+        opensips-cli -x mi uptime | grep -q "Up Time" || exit 1

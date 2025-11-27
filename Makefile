@@ -6,8 +6,17 @@ OPENSIPS_BUILD ?= releases
 OPENSIPS_COMPONENT ?=
 OPENSIPS_DOCKER_TAG ?= latest
 OPENSIPS_CLI ?= true
+WITH_HEALTHCHECK ?= true
 OPENSIPS_EXTRA_MODULES ?=
 DOCKER_ARGS ?=
+
+DOCKER_TARGET = no-healthcheck
+
+ifeq ($(OPENSIPS_CLI),true)
+	ifeq ($(WITH_HEALTHCHECK),true)
+		DOCKER_TARGET = with-healthcheck
+	endif
+endif
 
 all: build start
 
@@ -15,6 +24,7 @@ all: build start
 build:
 	docker build \
 		--no-cache \
+		--target=$(DOCKER_TARGET) \
 		--build-arg=OPENSIPS_BUILD=$(OPENSIPS_BUILD) \
 		--build-arg=OPENSIPS_VERSION=$(OPENSIPS_VERSION) \
 		--build-arg=OPENSIPS_VERSION_MINOR=$(OPENSIPS_VERSION_MINOR) \
