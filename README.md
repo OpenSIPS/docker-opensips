@@ -34,6 +34,7 @@ You can set different variables to tune your deployment:
  * `OPENSIPS_DOCKER_TAG` - indicates the docker tag (Default: `latest`)
  * `OPENSIPS_CLI` - specifies whether to install opensips-cli (`true`) or not (`false`) (Default: `true`)
  * `OPENSIPS_EXTRA_MODULES` - specifies extra opensips modules to install (Default: no other module)
+ * `OPENSIPS_COMPONENT` - specifies the opensips apt component to install (Default: ${OPENSIPS_VERSION}-${OPENSIPS_BUILD})
 
 ## Packages on DockerHub
 

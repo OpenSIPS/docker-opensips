@@ -8,6 +8,9 @@ inputs:
   tag:
     description: The Docker tag to publish the image
     required: false
+  component:
+    description: The apt component to pull the OpenSIPS deb from
+    required: false
   cli:
     description: Indicates whether to install OpenSIPS CLI as well
     required: false
@@ -38,8 +41,9 @@ runs:
       test -n "${{ inputs.version }}" && echo "OPENSIPS_VERSION=${{ inputs.version }}" >> $GITHUB_ENV || true
       test -n "${{ inputs.tag }}" && echo "OPENSIPS_DOCKER_TAG=${{ inputs.tag }}" >> $GITHUB_ENV || true
       test -n "${{ inputs.cli }}" && echo "OPENSIPS_CLI=${{ inputs.cli }}" >> $GITHUB_ENV || true
-      test -n "${{ inputs.modules }}" && echo "OPENSIPS_EXTRA_MODULES=\"${{ inputs.modules }}\"" >> $GITHUB_ENV || true
+      test -n "${{ inputs.modules }}" && echo "OPENSIPS_EXTRA_MODULES=${{ inputs.modules }}" >> $GITHUB_ENV || true
       test -n "${{ inputs.build }}" && echo "OPENSIPS_BUILD=\"${{ inputs.build }}\"" >> $GITHUB_ENV || true
+      test -n "${{ inputs.component }}" && echo "OPENSIPS_COMPONENT=\"${{ inputs.component }}\"" >> $GITHUB_ENV || true
 
   - name: Build the Docker image
     shell: bash
@@ -47,7 +51,7 @@ runs:
     run: make build 2>&1 | tee /tmp/build.log && grep "naming to docker.io" /tmp/build.log | awk  -F'[ /]' '{print "DOCKER_TAG=" $5 "/" $6 }' >> $GITHUB_OUTPUT
 
   - name: Log in to Docker Hub
-    uses: docker/login-action@v2.1.0
+    uses: docker/login-action@v3
     with:
       username: ${{ inputs.docker-username }}
       password: ${{ inputs.docker-token }}
