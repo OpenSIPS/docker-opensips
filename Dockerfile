@@ -1,4 +1,5 @@
-FROM debian:bullseye AS base
+ARG DEBIAN_RELEASE=bullseye
+FROM debian:${DEBIAN_RELEASE} AS base
 LABEL maintainer="Razvan Crainea <razvan@opensips.org>"
 
 USER root
@@ -13,11 +14,12 @@ ARG OPENSIPS_BUILD=releases
 ARG OPENSIPS_COMPONENT
 
 #install basic components
-RUN apt-get -y update -qq && apt-get -y install gnupg2 ca-certificates
+RUN apt-get -y update -qq && apt-get -y install gnupg ca-certificates curl
 
 #add keyserver, repository
-RUN apt-key adv --fetch-keys https://apt.opensips.org/pubkey.gpg
-RUN echo "deb https://apt.opensips.org bullseye \
+RUN curl https://apt.opensips.org/opensips-org.gpg -o /usr/share/keyrings/opensips-org.gpg
+RUN DEBIAN_RELEASE=$(grep VERSION_CODENAME /etc/os-release | cut -f2 -d '=') && \
+    echo "deb [signed-by=/usr/share/keyrings/opensips-org.gpg] https://apt.opensips.org ${DEBIAN_RELEASE} \
 		$(test -z "${OPENSIPS_COMPONENT}" && \
 				echo ${OPENSIPS_VERSION}-${OPENSIPS_BUILD} || \
 				echo ${OPENSIPS_COMPONENT})" >/etc/apt/sources.list.d/opensips.list
@@ -30,7 +32,8 @@ ARG OPENSIPS_CLI=false
 ENV OPENSIPS_CLI_ENV=${OPENSIPS_CLI}
 
 RUN if [ ${OPENSIPS_CLI} = true ]; then \
-    echo "deb https://apt.opensips.org bullseye cli-nightly" >/etc/apt/sources.list.d/opensips-cli.list \
+    DEBIAN_RELEASE=$(grep VERSION_CODENAME /etc/os-release | cut -f2 -d '=') && \
+    echo "deb https://apt.opensips.org ${DEBIAN_RELEASE} cli-nightly" >/etc/apt/sources.list.d/opensips-cli.list \
     && apt-get -y update -qq && apt-get -y install opensips-cli \
     ;fi
 
@@ -39,7 +42,7 @@ RUN if [ -n "${OPENSIPS_EXTRA_MODULES}" ]; then \
     apt-get -y install ${OPENSIPS_EXTRA_MODULES} \
     ;fi
 
-RUN rm -rf /var/lib/apt/lists/*
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN sed -i "s/stderror_enabled=no/stderror_enabled=yes/g" /etc/opensips/opensips.cfg && \
     sed -i "s/syslog_enabled=yes/syslog_enabled=no/g" /etc/opensips/opensips.cfg
 

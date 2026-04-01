@@ -12,7 +12,7 @@ make build
 This command will build a docker image with OpenSIPS master version taken from
 the git repository. To build a different git version, you can run:
 ```
-OPENSIPS_VERSION=2.2 make build
+OPENSIPS_VERSION=3.4 make build
 ```
 
 To build with MySQL support:
