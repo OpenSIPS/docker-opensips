@@ -15,16 +15,16 @@ inputs:
     description: Indicates whether to install OpenSIPS CLI as well
     required: false
   modules:
-    description: Space separated additional packets to install
+    description: Space-separated additional packages to install
     required: false
   build:
-    description: Indicate the build to use
+    description: Indicates the build to use
     required: false
   docker-username:
-    description: The Docker username to push the image with
+    description: The Docker username to push the image as
     required: true
   docker-token:
-    description: The Docker token used to authenticate
+    description: The Docker authentication token used
     required: true
 
 runs:
