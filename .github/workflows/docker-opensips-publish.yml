@@ -1,4 +1,4 @@
-name: Publish OpenSIPS Image in Docker Hub
+name: Publish OpenSIPS Image
 
 on:
   workflow_dispatch:
@@ -31,6 +31,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      packages: write
+
     steps:
     - name: Publish OpenSIPS Docker image
       uses: OpenSIPS/docker-opensips/.github/actions/docker-opensips-publish@main
@@ -43,3 +46,4 @@ jobs:
         component: ${{ github.event.inputs.component }}
         docker-username: ${{ secrets.DOCKER_USERNAME }}
         docker-token: ${{ secrets.DOCKER_TOKEN }}
+        ghcr-token: ${{ secrets.GITHUB_TOKEN }}
