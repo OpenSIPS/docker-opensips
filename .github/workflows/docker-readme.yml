@@ -10,6 +10,7 @@ on:
 
 jobs:
   dockerHubDescription:
+    if: ${{ github.repository == 'OpenSIPS/docker-opensips' }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -24,4 +25,3 @@ jobs:
         readme-filepath: ./README.md
         short-description: ${{ github.event.repository.description }}
         enable-url-completion: true
-
