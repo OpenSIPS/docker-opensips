@@ -29,6 +29,9 @@ inputs:
   ghcr-token:
     description: GitHub token used to push to ghcr.io (omit to skip GHCR publishing)
     required: false
+  ghcr-repo:
+    description: Optional repository name to insert into the GHCR path (ghcr.io/opensips/<ghcr-repo>/opensips); defaults to ghcr.io/opensips/opensips
+    required: false
 
 runs:
   using: "composite"
@@ -85,6 +88,8 @@ runs:
     if: ${{ github.repository == 'OpenSIPS/docker-opensips' && inputs.ghcr-token != '' }}
     shell: bash
     run: |
-      GHCR_TAG="ghcr.io/opensips/opensips:${OPENSIPS_DOCKER_TAG:-latest}"
+      GHCR_REPO="${{ inputs.ghcr-repo }}"
+      GHCR_PATH="opensips${GHCR_REPO:+/$GHCR_REPO}/opensips"
+      GHCR_TAG="ghcr.io/${GHCR_PATH}:${OPENSIPS_DOCKER_TAG:-latest}"
       docker tag "opensips/opensips:${OPENSIPS_DOCKER_TAG:-latest}" "$GHCR_TAG"
       docker push "$GHCR_TAG"
