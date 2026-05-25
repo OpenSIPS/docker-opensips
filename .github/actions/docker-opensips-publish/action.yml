@@ -75,6 +75,6 @@ runs:
     if: ${{ inputs.ghcr-token != '' }}
     shell: bash
     run: |
-      GHCR_TAG="ghcr.io/${{ github.repository_owner }}/opensips:${OPENSIPS_DOCKER_TAG:-latest}"
+      GHCR_TAG="ghcr.io/opensips/opensips:${OPENSIPS_DOCKER_TAG:-latest}"
       docker tag "opensips/opensips:${OPENSIPS_DOCKER_TAG:-latest}" "$GHCR_TAG"
       docker push "$GHCR_TAG"
