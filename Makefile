@@ -1,4 +1,5 @@
 NAME ?= opensips
+PACKAGE_NAME ?= opensips
 DEBIAN_RELEASE ?= bullseye
 OPENSIPS_VERSION ?= 3.6
 OPENSIPS_VERSION_MINOR ?=
@@ -35,8 +36,8 @@ build:
 		--build-arg=OPENSIPS_COMPONENT=${OPENSIPS_COMPONENT} \
 		--build-arg=OPENSIPS_EXTRA_MODULES="$(OPENSIPS_EXTRA_MODULES)" \
 		$(DOCKER_ARGS) \
-		--tag="opensips/opensips:$(OPENSIPS_DOCKER_TAG)" \
+		--tag="opensips/$(PACKAGE_NAME):$(OPENSIPS_DOCKER_TAG)" \
 		.
 
 start:
-	docker run -d --name $(NAME) opensips/opensips:$(OPENSIPS_DOCKER_TAG)
+	docker run -d --name $(NAME) opensips/$(PACKAGE_NAME):$(OPENSIPS_DOCKER_TAG)
