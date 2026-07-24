@@ -9,8 +9,8 @@ on:
       tag:
         description: Tag
         required: false
-      image:
-        description: Image name (replaces the repo in opensips/<image>:tag)
+      package:
+        description: Package name (replaces the repo in opensips/<package>:tag)
         required: false
       cli:
         description: Install CLI
@@ -44,7 +44,7 @@ jobs:
       with:
         version: ${{ github.event.inputs.version }}
         tag: ${{ github.event.inputs.tag }}
-        image: ${{ github.event.inputs.image }}
+        package: ${{ github.event.inputs.package }}
         cli: ${{ github.event.inputs.cli }}
         modules: ${{ github.event.inputs.modules }}
         build: ${{ github.event.inputs.build }}
