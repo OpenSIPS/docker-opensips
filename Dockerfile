@@ -58,4 +58,4 @@ HEALTHCHECK --interval=15s --timeout=5s \
     CMD if [ "$OPENSIPS_CLI_ENV" != "true" ]; then \
             exit 0; \
         fi; \
-        opensips-cli -x mi uptime | grep -q "Up Time" || exit 1
+        opensips-mi uptime 2>/dev/null | grep -q "Up since" || exit 1
