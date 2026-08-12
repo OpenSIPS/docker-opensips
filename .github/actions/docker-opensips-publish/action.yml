@@ -82,6 +82,7 @@ runs:
 
   - name: Publish the Docker image to GitHub Container Registry
     if: ${{ github.repository_owner == 'OpenSIPS' && inputs.ghcr-token != '' }}
+    id: ghcr
     shell: bash
     run: |
       GHCR_REPO="${{ inputs.ghcr-repo }}"
@@ -90,3 +91,55 @@ runs:
       GHCR_TAG="ghcr.io/${GHCR_PATH}:${OPENSIPS_DOCKER_TAG:-latest}"
       docker tag "opensips/${PACKAGE_NAME}:${OPENSIPS_DOCKER_TAG:-latest}" "$GHCR_TAG"
       docker push "$GHCR_TAG"
+      echo "GHCR_TAG=$GHCR_TAG" >> $GITHUB_OUTPUT
+
+  - name: Summary
+    if: ${{ always() }}
+    shell: bash
+    run: |
+      IMAGE="${{ steps.build.outputs.DOCKER_TAG }}"
+      VERSION=$(make -s print-OPENSIPS_VERSION)
+      MINOR=$(make -s print-OPENSIPS_VERSION_MINOR)
+      BUILD=$(make -s print-OPENSIPS_BUILD)
+      COMPONENT=$(make -s print-OPENSIPS_COMPONENT)
+      MODULES=$(make -s print-OPENSIPS_EXTRA_MODULES)
+
+      {
+        echo "## OpenSIPS Docker image"
+        echo
+        echo "| Setting | Value |"
+        echo "| --- | --- |"
+        echo "| OpenSIPS version | ${VERSION}${MINOR:+.$MINOR} |"
+        echo "| Debian release | $(make -s print-DEBIAN_RELEASE) |"
+        echo "| Apt component | ${COMPONENT:-${VERSION}-${BUILD}} |"
+        echo "| OpenSIPS CLI | $(make -s print-OPENSIPS_CLI) |"
+        echo "| Extra modules | ${MODULES:-none} |"
+        echo "| Docker target | $(make -s print-DOCKER_TARGET) |"
+      } >> $GITHUB_STEP_SUMMARY
+
+      if [ -z "$IMAGE" ]; then
+        echo -e "\n:x: The image failed to build." >> $GITHUB_STEP_SUMMARY
+        exit 0
+      fi
+
+      {
+        echo
+        echo "### Installed packages"
+        echo
+        echo "| Package | Version |"
+        echo "| --- | --- |"
+        docker run --rm --entrypoint dpkg-query "$IMAGE" \
+          -W -f '${db:Status-Abbrev}|${Package}|${Version}\n' 'opensips*' | \
+          awk -F'|' '$1 ~ /^ii/ { print "| `" $2 "` | " $3 " |" }'
+        echo
+        echo "### Published"
+        echo
+        if [ "${{ github.repository_owner }}" != "OpenSIPS" ]; then
+          echo "* Nothing published, the image is only built on the OpenSIPS organization"
+        else
+          echo "* Docker Hub: \`$IMAGE\`"
+          test -n "${{ steps.ghcr.outputs.GHCR_TAG }}" && \
+            echo "* GHCR: \`${{ steps.ghcr.outputs.GHCR_TAG }}\`" || \
+            echo "* GHCR: not published"
+        fi
+      } >> $GITHUB_STEP_SUMMARY

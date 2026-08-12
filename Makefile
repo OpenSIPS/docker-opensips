@@ -41,3 +41,7 @@ build:
 
 start:
 	docker run -d --name $(NAME) opensips/$(PACKAGE_NAME):$(OPENSIPS_DOCKER_TAG)
+
+# prints the effective value of a variable, i.e. make print-OPENSIPS_VERSION
+print-%:
+	@echo $($*)
