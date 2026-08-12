@@ -31,10 +31,9 @@ RUN apt-get -y update -qq && \
 ARG OPENSIPS_CLI=false
 ENV OPENSIPS_CLI_ENV=${OPENSIPS_CLI}
 
+# opensips-cli is published inside the same repository as the opensips packages
 RUN if [ ${OPENSIPS_CLI} = true ]; then \
-    DEBIAN_RELEASE=$(grep VERSION_CODENAME /etc/os-release | cut -f2 -d '=') && \
-    echo "deb https://apt.opensips.org ${DEBIAN_RELEASE} cli-nightly" >/etc/apt/sources.list.d/opensips-cli.list \
-    && apt-get -y update -qq && apt-get -y install opensips-cli \
+    apt-get -y install opensips-cli \
     ;fi
 
 ARG OPENSIPS_EXTRA_MODULES
