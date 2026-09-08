@@ -27,7 +27,7 @@ make start
 
 ## Variables
 You can set different variables to tune your deployment:
- * `DEBIAN_RELEASE` - sets the base image Debian release (Default: `bullseye`)
+ * `DEBIAN_RELEASE` - sets the base image Debian release (Default: `trixie`)
  * `OPENSIPS_VERSION` - sets the opensips version (Default: `3.6`)
  * `OPENSIPS_VERSION_MINOR` - forces a specific minor version of opensips (Default: not used, latest will be installed)
  * `OPENSIPS_VERSION_REVISION` - forces a specific revision/build of opensips; only taken into consideration if `OPENSIPS_VERSION_MINOR` is provided (Default: 1)

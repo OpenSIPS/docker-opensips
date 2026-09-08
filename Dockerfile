@@ -1,4 +1,4 @@
-ARG DEBIAN_RELEASE=bullseye
+ARG DEBIAN_RELEASE=trixie
 FROM debian:${DEBIAN_RELEASE} AS base
 LABEL maintainer="Razvan Crainea <razvan@opensips.org>"
 
