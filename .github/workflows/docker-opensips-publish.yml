@@ -24,6 +24,9 @@ on:
       component:
         description: Apt deb component
         required: false
+      debian-release:
+        description: Debian release
+        required: false
       modules:
         description: Extra Modules
         required: false
@@ -49,6 +52,7 @@ jobs:
         modules: ${{ github.event.inputs.modules }}
         build: ${{ github.event.inputs.build }}
         component: ${{ github.event.inputs.component }}
+        debian-release: ${{ github.event.inputs.debian-release }}
         docker-username: ${{ secrets.DOCKER_USERNAME }}
         docker-token: ${{ secrets.DOCKER_TOKEN }}
         ghcr-token: ${{ secrets.GITHUB_TOKEN }}

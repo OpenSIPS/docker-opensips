@@ -23,6 +23,9 @@ inputs:
   build:
     description: Indicates the build to use
     required: false
+  debian-release:
+    description: The Debian release used as the base image; defaults to trixie
+    required: false
   docker-username:
     description: The Docker username to push the image as
     required: true
@@ -54,6 +57,7 @@ runs:
       test -n "${{ inputs.modules }}" && echo "OPENSIPS_EXTRA_MODULES=${{ inputs.modules }}" >> $GITHUB_ENV || true
       test -n "${{ inputs.build }}" && echo "OPENSIPS_BUILD=\"${{ inputs.build }}\"" >> $GITHUB_ENV || true
       test -n "${{ inputs.component }}" && echo "OPENSIPS_COMPONENT=\"${{ inputs.component }}\"" >> $GITHUB_ENV || true
+      test -n "${{ inputs.debian-release }}" && echo "DEBIAN_RELEASE=${{ inputs.debian-release }}" >> $GITHUB_ENV || true
 
   - name: Build the Docker image
     shell: bash
